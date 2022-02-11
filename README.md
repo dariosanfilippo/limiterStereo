@@ -30,3 +30,9 @@
  explored as a creative means beautifully, for example, in the work of 
  Phil Niblock, which is a reason why I am interested in exploring these
  techniques.
+ 
+ ![Figure_0](https://user-images.githubusercontent.com/30258280/153643622-e3e698c0-cd32-4c5a-96f5-74e3ef4928ca.png)
+ 
+ ![Figure_1](https://user-images.githubusercontent.com/30258280/153643639-85be6520-9a9b-4788-b1be-6ee7819313fd.png)
+
+
