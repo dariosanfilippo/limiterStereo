@@ -17,8 +17,10 @@
 * produces an overshooting of only .002 dB with signals boosted by 120 dBs,
 * which I find negligible for most musical applications.
 *
-* The limiter introduces a delay that is equal to the attack time. The other
-* parameters are the hold time and the release time, for the amplitude
+* The limiter introduces a delay that is equal to the attack time times 
+* the samplerate minus one samples.
+*
+* The other parameters are the hold time and the release time, for the amplitude
 * profiling characteristics, as well as a bypass button, a pre-gain, and a
 * ceiling threshold.
 *
@@ -72,8 +74,8 @@ limiterStereo(xL_, xR_) =   (xL * (bypass) + (1 - bypass) * xLDelayed * stereoAt
     with {
         xL = xL_ * preGain;
         xR = xR_ * preGain;
-        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xL);
-        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xR);
+        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR - 1, xL);
+        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR - 1, xR);
         stereoAttenuationGain = gainAttenuation(threshold, attack, hold, release, max(abs(xL), abs(xR))) : attenuationDisplay;
         horizontalGroup(group) = hgroup("Look-ahead IIR Stereo Limiter", group);
         peakGroup(group) = hgroup("Peaks", group);
