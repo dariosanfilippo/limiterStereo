@@ -21,11 +21,11 @@
 * the samplerate samples.
 *
 * For better peak detection, N peak-hold sections with 1/N hold time can be 
-* cascaded, so that secondary peaks that are at least 1/N of the hold time
-* apart from the primary peak can still be detected. The secondary peaks
-* that are closer to the primary peaks can be taken care of by the release
-* section. Thanks to Geraint "Signalsmith" Luff and our discussions on the 
-* topic, which inspired this solution.
+* cascaded, so that secondary peaks that are at least 1/N of the hold time 
+* plus one sample apart from the primary peak can still be detected. 
+* The secondary peaks that are closer to the primary peaks can be taken care 
+* of by the release section. Thanks to Geraint "Signalsmith" Luff and our 
+* discussions on the topic, which inspired this solution.
 *
 * The other parameters are the hold time and the release time, for the 
 * amplitude profiling characteristics, as well as a bypass button, a pre-gain, 
