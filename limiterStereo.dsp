@@ -20,9 +20,9 @@
 * The limiter introduces a delay that is equal to the attack time times 
 * the samplerate minus one samples.
 *
-* The other parameters are the hold time and the release time, for the amplitude
-* profiling characteristics, as well as a bypass button, a pre-gain, and a
-* ceiling threshold.
+* The other parameters are the hold time and the release time, for the 
+* amplitude profiling characteristics, as well as a bypass button, a pre-gain, 
+* and a ceiling threshold.
 *
 * The limiter is stereo-linked, hence the relative left-right amplitude 
 * difference is preserved.
@@ -43,19 +43,20 @@ import("stdfaust.lib");
 declare limiterStereo author "Dario Sanfilippo";
 declare limiterStereo copyright
     "Copyright (C) 2022 Dario Sanfilippo <sanfilippo.dario@gmail.com>";
-declare version "0.1";
+declare version "0.2";
 declare limiterStereo license "MIT-style STK-4.3 license";
 peakHold(t, x) = loop ~ _
     with {
         loop(fb) = ba.sAndH(cond1 | cond2, abs(x))
             with {
                 cond1 = abs(x) >= fb;
-                cond2 = loop ~ _ <: (_ - _') < 0
+                cond2 = loop ~ _ <: _ < _'
                     with {
-                        loop(fb) = ma.frac((1 - cond1) * (fb + 1.0 / (t * ma.SR)));
+                        loop(fb) = ((1 - cond1) * fb + (1 - cond1)) % (t * ma.SR + 1);
                     };
             };
     };
+peakHoldCascade(N, holdTime, x) = x : seq(i, N, peakHold(holdTime / N));
 smoother(N, att, rel, x) = loop ~ _
     with {
         loop(fb) = ba.if(abs(x) >= fb, attSection, relSection)
@@ -68,14 +69,14 @@ smoother(N, att, rel, x) = loop ~ _
             };
     };
 smootherCascade(N, att, rel, x) = x : seq(i, N, smoother(N, att, rel));
-gainAttenuation(th, att, hold, rel, x) =  th / (max(1.0, peakHold(att + hold, x)) : smootherCascade(4, att, rel));
+gainAttenuation(th, att, hold, rel, x) =  th / (max(1.0, peakHoldCascade(8, att + hold, x)) : smootherCascade(4, att, rel));
 limiterStereo(xL_, xR_) =   (xL * (bypass) + (1 - bypass) * xLDelayed * stereoAttenuationGain : peakDisplayL),
                             (xR * (bypass) + (1 - bypass) * xRDelayed * stereoAttenuationGain : peakDisplayR)
     with {
         xL = xL_ * preGain;
         xR = xR_ * preGain;
-        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR - 1, xL);
-        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR - 1, xR);
+        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xL);
+        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xR);
         stereoAttenuationGain = gainAttenuation(threshold, attack, hold, release, max(abs(xL), abs(xR))) : attenuationDisplay;
         horizontalGroup(group) = hgroup("Look-ahead IIR Stereo Limiter", group);
         peakGroup(group) = hgroup("Peaks", group);
