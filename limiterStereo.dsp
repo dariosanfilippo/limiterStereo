@@ -82,9 +82,9 @@ gainAttenuation(th, att, hold, rel, x) =
     th / (max(1.0, peakHoldCascade(8, att + hold, x)) : 
         smootherCascade(4, att, rel));
 limiterStereo(xL_, xR_) =   
-    (xL * (bypass) + (1 - bypass) * xLDelayed * stereoAttenuationGain : 
+    (xL_ * (bypass) + (1 - bypass) * xLDelayed * stereoAttenuationGain : 
         peakDisplayL),
-    (xR * (bypass) + (1 - bypass) * xRDelayed * stereoAttenuationGain : 
+    (xR_ * (bypass) + (1 - bypass) * xRDelayed * stereoAttenuationGain : 
         peakDisplayR)
     with {
         xL = xL_ * preGain;
