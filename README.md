@@ -43,6 +43,10 @@ techniques.
  
  ![Figure_1](https://user-images.githubusercontent.com/30258280/153643639-85be6520-9a9b-4788-b1be-6ee7819313fd.png)
  
+ ![peakdetectionedgecase0](https://user-images.githubusercontent.com/30258280/153750561-a6b7ce92-aaf1-4927-86d5-9d130abbacbe.png)
+
+ ![peakdetectionedgecase1](https://user-images.githubusercontent.com/30258280/153750565-11f07762-309d-4ea3-9593-a1a2fd97ec58.png)
+ 
  <img width="800" alt="image" src="https://user-images.githubusercontent.com/30258280/153645236-b0ab2bcd-e3f0-4a3a-adfe-a73ed52a737b.png">
 
 
