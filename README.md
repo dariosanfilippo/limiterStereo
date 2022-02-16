@@ -43,6 +43,8 @@ techniques.
  ![Figure_0](https://user-images.githubusercontent.com/30258280/153643622-e3e698c0-cd32-4c5a-96f5-74e3ef4928ca.png)
  
  ![Figure_1](https://user-images.githubusercontent.com/30258280/153643639-85be6520-9a9b-4788-b1be-6ee7819313fd.png)
+
+ ![desmos-graph](https://user-images.githubusercontent.com/30258280/154347305-ec464f50-65b3-44f4-976f-823baba92054.png)
  
  ![peakdetectionedgecase0](https://user-images.githubusercontent.com/30258280/153750561-a6b7ce92-aaf1-4927-86d5-9d130abbacbe.png)
 
