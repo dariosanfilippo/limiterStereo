@@ -80,7 +80,7 @@ smoother(N, att, rel, x) = loop ~ _
     };
 smootherCascade(N, att, rel, x) = x : seq(i, N, smoother(N, att, rel));
 gainAttenuation(th, att, hold, rel, x) =  
-    th / (max(1.0, peakHoldCascade(8, att + hold, x)) : 
+    th / (max(th, peakHoldCascade(8, att + hold, x)) : 
         smootherCascade(4, att, rel));
 limiterStereo(xL_, xR_) =   
     (xL_ * (bypass) + (1 - bypass) * xLDelayed * stereoAttenuationGain : 
