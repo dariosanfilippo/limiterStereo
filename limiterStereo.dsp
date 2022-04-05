@@ -89,8 +89,9 @@ limiterStereo(xL_, xR_) =
     with {
         xL = xL_ * preGain;
         xR = xR_ * preGain;
-        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xL);
-        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, attack * ma.SR, xR);
+        delay = rint((attack / 8) * ma.SR) * 8;
+        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, delay, xL);
+        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, delay, xR);
         stereoAttenuationGain = 
             gainAttenuation(threshold, 
                             attack, 
