@@ -52,16 +52,15 @@ declare limiterStereo copyright
     "Copyright (C) 2022 Dario Sanfilippo <sanfilippo.dario@gmail.com>";
 declare version "0.2";
 declare limiterStereo license "MIT-style STK-4.3 license";
-peakHold(t, x) = loop ~ _
+peakHold(t, x) = loop ~ si.bus(2) : ! , _
     with {
-        loop(fb) = ba.sAndH(cond1 | cond2, abs(x))
+        loop(timerState, outState) = timer , output
             with {
-                cond1 = abs(x) >= fb;
-                cond2 = loop ~ _ <: _ < _'
-                    with {
-                        loop(fb) = 
-                            ((1 - cond1) * fb + (1 - cond1)) % (t * ma.SR + 1);
-                    };
+                isNewPeak = abs(x) >= outState;
+                isTimeOut = timerState >= rint(t * ma.SR);
+                bypass = isNewPeak | isTimeOut;
+                timer = (1 - bypass) * (timerState + 1);
+                output = bypass * (abs(x) - outState) + outState;
             };
     };
 peakHoldCascade(N, holdTime, x) = x : seq(i, N, peakHold(holdTime / N));
