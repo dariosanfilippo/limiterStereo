@@ -102,13 +102,13 @@ limiterStereo(xL_, xR_) =
         displayGroup(display) = horizontalGroup(vgroup("Display", display));
         controlGroup(param) = horizontalGroup(vgroup("Control", param));
         peakDisplayL(peak) = 
-            displayGroup(peakGroup(attach(peak, (max(peak, abs) ~ *(reset) : 
+            displayGroup(peakGroup(attach(peak, (peakHold(3, peak) : 
                 ba.linear2db : 
                     vbargraph(  "[06]Left Peak (dB)[style:numerical]", 
                                 -60, 
                                 60)))));
         peakDisplayR(peak) = 
-            displayGroup(peakGroup(attach(peak, (max(peak, abs) ~ *(reset) : 
+            displayGroup(peakGroup(attach(peak, (peakHold(3, peak) : 
                 ba.linear2db : 
                     vbargraph(  "[07]Right Peak (dB)[style:numerical]", 
                                 -60, 
