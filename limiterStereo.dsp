@@ -66,10 +66,9 @@ peakHold(t, x) = loop ~ si.bus(2) : ! , _
 peakHoldCascade(N, holdTime, x) = x : seq(i, N, peakHold(holdTime / N));
 smoother(N, att, rel, x) = loop ~ _
     with {
-        loop(fb) = ba.if(abs(x) >= fb, attSection, relSection)
+        loop(fb) = coeff * fb + (1.0 - coeff) * x
             with {
-                attSection = attCoeff * fb + (1.0 - attCoeff) * abs(x);
-                relSection = relCoeff * fb + (1.0 - relCoeff) * abs(x);
+                coeff = ba.if(x > fb, attCoeff, relCoeff);
                 attCoeff = 
                     exp((((-2.0 * ma.PI) / att) * cutoffCorrection) * ma.T);
                 relCoeff = 
