@@ -50,7 +50,7 @@ import("stdfaust.lib");
 declare limiterStereo author "Dario Sanfilippo";
 declare limiterStereo copyright
     "Copyright (C) 2022 Dario Sanfilippo <sanfilippo.dario@gmail.com>";
-declare version "0.2";
+declare version "0.4.0";
 declare limiterStereo license "MIT-style STK-4.3 license";
 sdelay(maxDelay, interpolationLen, delayLen, x) = 
     loop ~ si.bus(4) : (! , ! , ! , ! , _)
@@ -112,8 +112,8 @@ limiterStereo(xL_, xR_) =
         xL = xL_ * preGain;
         xR = xR_ * preGain;
         delay = rint((attack / 8) * ma.SR) * 8;
-        xLDelayed = sdelay(.1 * ma.SR, .02 * ma.SR, delay, xL);
-        xRDelayed = sdelay(.1 * ma.SR, .02 * ma.SR, delay, xR);
+        xLDelayed = sdelay(.1 * ma.SR, delay, delay, xL);
+        xRDelayed = sdelay(.1 * ma.SR, delay, delay, xR);
         stereoAttenuationGain = 
             gainAttenuation(threshold, 
                             attack, 
