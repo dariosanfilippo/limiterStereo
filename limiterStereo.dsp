@@ -92,10 +92,9 @@ smoother(N, att, rel, x) = loop ~ _
         loop(fb) = coeff * fb + (1.0 - coeff) * x
             with {
                 coeff = ba.if(x > fb, attCoeff, relCoeff);
-                attCoeff = 
-                    exp((((-2.0 * ma.PI) / att) * cutoffCorrection) * ma.T);
-                relCoeff = 
-                    exp((((-2.0 * ma.PI) / rel) * cutoffCorrection) * ma.T);
+                twoPiCT = 2.0 * ma.PI * cutoffCorrection * ma.T;
+                attCoeff = exp(-twoPiCT / att);
+                relCoeff = exp(-twoPiCT / rel);
                 cutoffCorrection = 1.0 / sqrt(pow(2.0, 1.0 / N) - 1.0);
             };
     };
