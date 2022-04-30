@@ -52,6 +52,29 @@ declare limiterStereo copyright
     "Copyright (C) 2022 Dario Sanfilippo <sanfilippo.dario@gmail.com>";
 declare version "0.2";
 declare limiterStereo license "MIT-style STK-4.3 license";
+sdelay(maxDelay, interpolationLen, delayLen, x) = 
+    loop ~ si.bus(4) : (! , ! , ! , ! , _)
+    with {
+        loop(lineState, incrState, lowerDelayState, upperDelayState) = 
+            line , incr , lowerDelay , upperDelay , output
+            with {
+                lowerReach = lineState == 0;
+                upperReach = lineState == 1;
+                lowerDelayChange = delayLen != lowerDelayState;
+                upperDelayChange = delayLen != upperDelayState;
+                incr = ba.if(   upperReach & upperDelayChange,
+                                -1.0 / interpolationLen,
+                                ba.if(  lowerReach & lowerDelayChange),
+                                        1.0 / interpolationLen,
+                                        incrState);
+                line = max(.0, min(1.0, lineState + incr));
+                lowerDelay = ba.if(upperReach, delayLen, lowerDelayState);
+                upperDelay = ba.if(lowerReach, delayLen, upperDelayState);
+                lowerDelayline = de.delay(maxDelay, lowerDelay, x) * (1.0 - line);
+                upperDelayline = de.delay(maxDelay, upperDelay, x) * line;
+                output = lowerDelayline + upperDelayline;
+            };
+    };
 peakHold(t, x) = loop ~ si.bus(2) : ! , _
     with {
         loop(timerState, outState) = timer , output
@@ -89,8 +112,8 @@ limiterStereo(xL_, xR_) =
         xL = xL_ * preGain;
         xR = xR_ * preGain;
         delay = rint((attack / 8) * ma.SR) * 8;
-        xLDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, delay, xL);
-        xRDelayed = de.sdelay(.1 * ma.SR, .02 * ma.SR, delay, xR);
+        xLDelayed = sdelay(.1 * ma.SR, .02 * ma.SR, delay, xL);
+        xRDelayed = sdelay(.1 * ma.SR, .02 * ma.SR, delay, xR);
         stereoAttenuationGain = 
             gainAttenuation(threshold, 
                             attack, 
