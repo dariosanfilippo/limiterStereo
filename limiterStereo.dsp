@@ -138,7 +138,6 @@ limiterStereo(xL_, xR_) =
         attenuationDisplay(attenuation) = 
             displayGroup(attach(attenuation, attenuation : 
                 ba.linear2db : vbargraph("[09]Attenuation (dB)", -120, 0)));
-        reset = 1 - button("[08]Reset Peak");
         bypass = controlGroup(checkbox("[00]Bypass")) : si.smoo;
         preGain = controlGroup(ba.db2linear(hslider("[01]Pre Gain (dB)", 
                                             0, 
